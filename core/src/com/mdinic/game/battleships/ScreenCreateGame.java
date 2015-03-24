@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -27,6 +28,8 @@ public class ScreenCreateGame extends ScreenBase {
     Skin skin;
 
     private Batch batch;
+
+    private SpriteBatch sbatch;
 
     public ScreenCreateGame(Game game, MapRenderer renderer) {
         super(game, renderer);
@@ -91,9 +94,12 @@ public class ScreenCreateGame extends ScreenBase {
         numberOfPlayers.setItems(2, 3, 4);
         numberOfPlayers.setSelectedIndex(0);
 
-        batch = stage.getBatch();
+        // batch = stage.getBatch();
 
         background = new Texture(Gdx.files.internal("background.png"));
+
+        batch = new SpriteBatch();
+        batch.getProjectionMatrix().setToOrtho2D(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
     @Override
