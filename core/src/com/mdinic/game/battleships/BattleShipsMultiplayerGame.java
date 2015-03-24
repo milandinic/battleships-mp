@@ -6,6 +6,6 @@ public class BattleShipsMultiplayerGame extends Game {
 
     @Override
     public void create() {
-        setScreen(new ScreenCreateGame(null, null));
+        setScreen(new ScreenMainMenu(this, null));
     }
 }
