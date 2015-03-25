@@ -10,14 +10,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-public class ScreenCreateGame extends ScreenBase {
+public class ScreenCreateGameWaitForPlayers extends ScreenBase {
 
     // SpriteBatch batch;
     private Texture background;
@@ -29,9 +29,7 @@ public class ScreenCreateGame extends ScreenBase {
 
     private Batch batch;
 
-    private SpriteBatch sbatch;
-
-    public ScreenCreateGame(Game game, MapRenderer renderer) {
+    public ScreenCreateGameWaitForPlayers(Game game, MapRenderer renderer) {
         super(game, renderer);
     }
 
@@ -46,34 +44,30 @@ public class ScreenCreateGame extends ScreenBase {
         stage = new Stage(new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        Label numberOfPlayersLabel = new Label("Number of players", skin);
+        List<String> listOfGames = new List<String>(skin);
 
-        SelectBox<Integer> numberOfPlayers = new SelectBox<Integer>(skin);
+        ScrollPane scroll = new ScrollPane(listOfGames, skin);
 
-        numberOfPlayers.setPosition(615, 550);
-        numberOfPlayers.setSize(70, 50);
-        stage.addActor(numberOfPlayers);
+        listOfGames.setItems("NIkoa", "Nikao", "Milan", "HTC");
 
-        numberOfPlayersLabel.setSize(200, 50);
-        numberOfPlayersLabel.setPosition(numberOfPlayers.getX() - numberOfPlayersLabel.getWidth() * 2,
-                numberOfPlayers.getY());
-        stage.addActor(numberOfPlayersLabel);
+        scroll.setPosition(615, 300);
+        scroll.setSize(285, 350);
+        // scroll.
+        stage.addActor(scroll);
 
-        // TODO search for existing names on networks and add a unique name from
-        // e.g. list (epic battle, black sea battle etc)
-        TextField gameName = new TextField("Epic battle", skin);
+        Label playersLabel = new Label("Players", skin);
 
-        gameName.setPosition(615, 450);
-        gameName.setSize(300, 50);
-        stage.addActor(gameName);
+        playersLabel.setSize(200, 50);
+        playersLabel.setPosition(scroll.getX() - playersLabel.getWidth() * 2, scroll.getY() + scroll.getHeight()
+                - playersLabel.getHeight());
+        stage.addActor(playersLabel);
 
-        Label gameNameLabel = new Label("Game name", skin);
+        TextButton kick = new TextButton("Kick player", skin);
+        kick.setPosition(615, 160);
+        kick.setSize(285, 100);
+        stage.addActor(kick);
 
-        gameNameLabel.setSize(200, 50);
-        gameNameLabel.setPosition(gameName.getX() - gameNameLabel.getWidth() * 2, gameName.getY());
-        stage.addActor(gameNameLabel);
-
-        TextButton createGame = new TextButton("Create Game", skin);
+        TextButton createGame = new TextButton("GO!", skin);
         createGame.setPosition(615, 50);
         createGame.setSize(285, 100);
         stage.addActor(createGame);
@@ -87,27 +81,14 @@ public class ScreenCreateGame extends ScreenBase {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                game.setScreen(new ScreenMainMenu(game, renderer));
+                game.setScreen(new ScreenCreateGame(game, renderer));
             }
         });
-
-        createGame.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                game.setScreen(new ScreenCreateGameWaitForPlayers(game, renderer));
-            }
-        });
-
-        numberOfPlayers.setItems(2, 3, 4);
-        numberOfPlayers.setSelectedIndex(0);
-
-        // batch = stage.getBatch();
-
-        background = new Texture(Gdx.files.internal("background.png"));
 
         batch = new SpriteBatch();
         batch.getProjectionMatrix().setToOrtho2D(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        background = new Texture(Gdx.files.internal("background.png"));
     }
 
     @Override
@@ -119,6 +100,7 @@ public class ScreenCreateGame extends ScreenBase {
 
         batch.begin();
         batch.draw(background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
         batch.end();
 
         stage.draw();
