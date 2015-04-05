@@ -168,16 +168,33 @@ public class ScreenPlaceYourShips extends ScreenBase {
         shape.end();
     }
 
+    private void drawDragColors() {
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        shape.begin(ShapeType.Filled);
+
+        shape.setColor(0, 1, 0, 0.5f);
+
+        // float y = (Gdx.graphics.getHeight() - Gdx.input.getY() - OFFSET_Y) /
+        // CELL_SIZE;
+        float x = (Gdx.input.getX() - OFFSET_X) / CELL_SIZE;
+        float y = (Gdx.graphics.getHeight() - Gdx.input.getY() - OFFSET_Y) / CELL_SIZE;
+
+        shape.rect(CELL_SIZE * x + OFFSET_X, y * CELL_SIZE + OFFSET_Y, CELL_SIZE * dragShip.size, CELL_SIZE);
+
+        shape.end();
+
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+    }
+
     private void readKeys() {
         // read keys clicked on map
 
         float x = (Gdx.input.getX() - OFFSET_X) / CELL_SIZE;
         float y = (Gdx.graphics.getHeight() - Gdx.input.getY() - OFFSET_Y) / CELL_SIZE;
-
-        if (x >= 0 && x < 10 && y >= 0 && y < 10 && Gdx.input.justTouched()) {
-            System.out.println(x + "x" + y);
-
-        }
 
         Vector2 clickPosition = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 
@@ -201,6 +218,12 @@ public class ScreenPlaceYourShips extends ScreenBase {
             if (Gdx.input.isTouched()) {
                 dragShip.bounds.x = Gdx.input.getX() - clickCorrection.x;
                 dragShip.bounds.y = Gdx.graphics.getHeight() - Gdx.input.getY() - clickCorrection.y;
+
+                if (x >= 0 && x < 10 && y >= 0 && y < 10) {
+                    System.out.println(x + "x" + y);
+                    drawDragColors();
+                }
+
             } else {
                 dragShip = null;
             }
