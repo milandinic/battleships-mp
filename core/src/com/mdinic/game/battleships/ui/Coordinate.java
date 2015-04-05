@@ -1,4 +1,4 @@
-package com.mdinic.game.battleships;
+package com.mdinic.game.battleships.ui;
 
 public class Coordinate {
 

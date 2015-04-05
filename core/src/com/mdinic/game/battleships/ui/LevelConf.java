@@ -1,6 +1,6 @@
-package com.mdinic.game.battleships;
+package com.mdinic.game.battleships.ui;
 
-import com.mdinic.game.battleships.Sounds.BgMusic;
+import com.mdinic.game.battleships.ui.Sounds.BgMusic;
 
 public enum LevelConf {
 

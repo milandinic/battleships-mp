@@ -1,4 +1,4 @@
-package com.mdinic.game.battleships;
+package com.mdinic.game.battleships.ui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

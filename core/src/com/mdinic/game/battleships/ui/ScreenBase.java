@@ -1,7 +1,8 @@
-package com.mdinic.game.battleships;
+package com.mdinic.game.battleships.ui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.mdinic.game.battleships.BattleShipsMultiplayerGame;
 
 public abstract class ScreenBase implements Screen {
 

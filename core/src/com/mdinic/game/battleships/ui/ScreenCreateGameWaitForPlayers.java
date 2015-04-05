@@ -1,4 +1,4 @@
-package com.mdinic.game.battleships;
+package com.mdinic.game.battleships.ui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -89,6 +89,7 @@ public class ScreenCreateGameWaitForPlayers extends ScreenBase {
         batch.getProjectionMatrix().setToOrtho2D(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         background = new Texture(Gdx.files.internal("background.png"));
+
     }
 
     @Override

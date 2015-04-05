@@ -1,4 +1,4 @@
-package com.mdinic.game.battleships;
+package com.mdinic.game.battleships.ui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class GameScreen extends ScreenBase {
 
     GameMap map;
-    OnscreenControlRenderer controlRenderer;
 
     boolean stopMusic = true;
     boolean fromBonus = false;
@@ -21,16 +20,10 @@ public class GameScreen extends ScreenBase {
     public GameScreen(Game game, GameMap oldMap, MapRenderer renderer) {
         super(game, renderer);
         map = oldMap;
-        renderer.setMap(map);
     }
 
     @Override
     public void show() {
-
-        controlRenderer = new OnscreenControlRenderer(map, this);
-
-        // if (!fromBonus)
-        // map.sounds.play(LevelConf.values()[map.level].getMusic());
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -59,10 +52,9 @@ public class GameScreen extends ScreenBase {
             map.update(delta);
         }
 
-        Gdx.gl.glClearColor(map.r, map.g, map.b, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.render(delta);
-        controlRenderer.render();
 
         // if (map.ship.pos.x >= GameMap.MAP_LENGTH) {
         // getGame().setScreen(new GameScreen(getGame(), new GameMap(0,
@@ -92,7 +84,7 @@ public class GameScreen extends ScreenBase {
         Gdx.app.debug("GianaSisters", "dispose game screen");
         // if (stopMusic)
         // map.sounds.stop(LevelConf.values()[map.level].getMusic());
-        controlRenderer.dispose();
+
     }
 
 }

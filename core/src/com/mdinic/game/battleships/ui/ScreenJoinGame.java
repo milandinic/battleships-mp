@@ -1,31 +1,40 @@
-package com.mdinic.game.battleships;
+package com.mdinic.game.battleships.ui;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-public class ScreenMainMenu extends ScreenBase {
+public class ScreenJoinGame extends ScreenBase {
 
+    // SpriteBatch batch;
     private Texture background;
-    private Skin skin;
-    private Stage stage;
+
+    public BitmapFont font;
+
+    Stage stage;
+    Skin skin;
+
     private Batch batch;
 
-    public ScreenMainMenu(Game game, MapRenderer renderer) {
+    public ScreenJoinGame(Game game, MapRenderer renderer) {
         super(game, renderer);
     }
 
     @Override
     public void show() {
+
         super.show();
 
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -34,36 +43,48 @@ public class ScreenMainMenu extends ScreenBase {
         stage = new Stage(new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        TextButton create = new TextButton("New Game", skin);
-        create.setPosition(615, 550);
-        create.setSize(285, 100);
-        stage.addActor(create);
+        List<String> listOfGames = new List<String>(skin);
 
-        create.addListener(new ClickListener() {
+        ScrollPane scroll = new ScrollPane(listOfGames, skin);
+
+        listOfGames.setItems("Epic battle", "some game", "Addriatic battle", "Black sea battle", "Atlantic survival",
+                "Ice sea battle", "more gam2", "more gam3", "more gam5", "more game", "more gam6", "more gam7");
+
+        scroll.setPosition(615, 250);
+        scroll.setSize(285, 400);
+        // scroll.
+        stage.addActor(scroll);
+
+        TextButton join = new TextButton("Join", skin);
+        join.setPosition(615, 50);
+        join.setSize(285, 100);
+        stage.addActor(join);
+
+        TextButton back = new TextButton("Back", skin);
+        back.setPosition(50, 50);
+        back.setSize(285, 100);
+        stage.addActor(back);
+
+        back.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                game.setScreen(new ScreenCreateGame(game, renderer));
+                game.setScreen(new ScreenMainMenu(game, renderer));
             }
         });
-
-        TextButton join = new TextButton("Join Game", skin);
-        join.setPosition(615, 411);
-        join.setSize(285, 100);
-        stage.addActor(join);
 
         join.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                game.setScreen(new ScreenJoinGame(game, renderer));
+                game.setScreen(new ScreenJoinGameWaitToStart(game, renderer));
             }
         });
 
         batch = new SpriteBatch();
         batch.getProjectionMatrix().setToOrtho2D(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        background = new Texture(Gdx.files.internal("mainmenu.png"));
+        background = new Texture(Gdx.files.internal("background.png"));
     }
 
     @Override
@@ -71,13 +92,14 @@ public class ScreenMainMenu extends ScreenBase {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        stage.act(delta);
+
         batch.begin();
         batch.draw(background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
         batch.end();
 
-        stage.act(delta);
         stage.draw();
-
     }
 
     @Override
@@ -85,9 +107,9 @@ public class ScreenMainMenu extends ScreenBase {
         super.dispose();
 
         background.dispose();
+
         batch.dispose();
-        stage.dispose();
-        skin.dispose();
+        font.dispose();
     }
 
 }

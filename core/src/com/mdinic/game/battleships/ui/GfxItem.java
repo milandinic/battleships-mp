@@ -1,19 +1,18 @@
-package com.mdinic.game.battleships;
+package com.mdinic.game.battleships.ui;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class GfxItem {
 
-    GameMap map;
     Vector2 pos = new Vector2();
     Rectangle bounds = new Rectangle();
+
     float stateTime = 0;
 
     float rotation = 0;
 
-    public GfxItem(GameMap map, float x, float y) {
-        this.map = map;
+    public GfxItem(float x, float y) {
         pos.x = x;
         pos.y = y;
 
@@ -30,4 +29,5 @@ public abstract class GfxItem {
     public int getColor() {
         return 0;
     }
+
 }
