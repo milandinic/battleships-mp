@@ -18,11 +18,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class ScreenPlaceYourShips extends ScreenBase {
 
-    static final int CELL_SIZE = 40;
-    static final int LINE_WIDTH = 2;
+    static int CELL_SIZE;
+    static int LINE_WIDTH = 2;
 
-    static final int OFFSET_X = 30;
-    static final int OFFSET_Y = 50;
+    static int OFFSET_X;
+    static int OFFSET_Y;
 
     // SpriteBatch batch;
     private Texture background;
@@ -45,45 +45,50 @@ public class ScreenPlaceYourShips extends ScreenBase {
     public ScreenPlaceYourShips(Game game, MapRenderer renderer) {
         super(game, renderer);
 
-        int shipOffesetX = Gdx.graphics.getWidth() - 200;
-        int shipOffesetY = 50;
-        int shipStepY = 80;
+        CELL_SIZE = Gdx.graphics.getHeight() / 12;
+
+        OFFSET_X = CELL_SIZE;
+        OFFSET_Y = CELL_SIZE;
+
+        int shipOffesetX = Gdx.graphics.getWidth() - CELL_SIZE * 5;
+        int shipOffesetY = CELL_SIZE;
+        int shipStepY = CELL_SIZE * 2;
 
         Ship ship = new Ship(shipOffesetX, shipOffesetY);
-        ship.bounds.width = 100;
-        ship.bounds.height = 60;
+        ship.bounds.width = CELL_SIZE * 3;
+        ship.bounds.height = CELL_SIZE * 2;
         ship.horizontal = true;
         ship.size = 1;
         ships.add(ship);
         shipsGfx.add(new TextureRegion(new Texture(Gdx.files.internal(ship.size + ".png"))));
 
         ship = new Ship(shipOffesetX, shipOffesetY + shipStepY * ships.size());
-        ship.bounds.width = 120;
-        ship.bounds.height = 70;
+        ship.bounds.width = CELL_SIZE * 3;
+        ship.bounds.height = CELL_SIZE * 2;
         ship.horizontal = true;
         ship.size = 2;
         ships.add(ship);
         shipsGfx.add(new TextureRegion(new Texture(Gdx.files.internal(ship.size + ".png"))));
 
         ship = new Ship(shipOffesetX, shipOffesetY + shipStepY * ships.size());
-        ship.bounds.width = 140;
-        ship.bounds.height = 70;
+        ship.bounds.width = CELL_SIZE * 3;
+        ship.bounds.height = CELL_SIZE * 2;
         ship.horizontal = true;
         ship.size = 3;
         ships.add(ship);
         shipsGfx.add(new TextureRegion(new Texture(Gdx.files.internal(ship.size + ".png"))));
 
         ship = new Ship(shipOffesetX, shipOffesetY + shipStepY * ships.size());
-        ship.bounds.width = 160;
-        ship.bounds.height = 70;
+        ship.bounds.width = CELL_SIZE * 4;
+        ship.bounds.height = CELL_SIZE * 2;
         ship.horizontal = true;
         ship.size = 4;
         ships.add(ship);
         shipsGfx.add(new TextureRegion(new Texture(Gdx.files.internal(ship.size + ".png"))));
 
         ship = new Ship(shipOffesetX, shipOffesetY + shipStepY * ships.size());
-        ship.bounds.width = 180;
-        ship.bounds.height = 70;
+        ship.bounds.width = CELL_SIZE * 5;
+        ship.bounds.height = CELL_SIZE * 2;
         ship.horizontal = true;
         ship.size = 5;
         ships.add(ship);
