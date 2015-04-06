@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 
 public class ScreenPlaceYourShips extends ScreenBase {
@@ -87,6 +88,8 @@ public class ScreenPlaceYourShips extends ScreenBase {
         ship.size = 5;
         ships.add(ship);
         shipsGfx.add(new TextureRegion(new Texture(Gdx.files.internal(ship.size + ".png"))));
+
+        Gdx.input.setInputProcessor(new GestureDetector(new MyGestureListener()));
 
     }
 
@@ -177,12 +180,25 @@ public class ScreenPlaceYourShips extends ScreenBase {
 
         shape.setColor(0, 1, 0, 0.5f);
 
-        // float y = (Gdx.graphics.getHeight() - Gdx.input.getY() - OFFSET_Y) /
-        // CELL_SIZE;
-        float x = (Gdx.input.getX() - OFFSET_X) / CELL_SIZE;
-        float y = (Gdx.graphics.getHeight() - Gdx.input.getY() - OFFSET_Y) / CELL_SIZE;
+        for (Ship ship : ships) {
 
-        shape.rect(CELL_SIZE * x + OFFSET_X, y * CELL_SIZE + OFFSET_Y, CELL_SIZE * dragShip.size, CELL_SIZE);
+            int x = (int) (ship.bounds.x / CELL_SIZE);
+            int y = (int) (ship.bounds.y / CELL_SIZE);
+
+            y--;
+            if (ship.horizontal) {
+
+                if (x >= 0 && x + ship.size <= 10 && y >= 0 && y < 10) {
+                    shape.rect(CELL_SIZE * x + OFFSET_X, y * CELL_SIZE + OFFSET_Y, CELL_SIZE * ship.size, CELL_SIZE);
+                }
+            } else {
+
+                if (x >= 0 && x < 10 && y >= 0 && y + ship.size <= 10) {
+                    shape.rect(CELL_SIZE * x + OFFSET_X, y * CELL_SIZE + OFFSET_Y, CELL_SIZE, CELL_SIZE * ship.size);
+                }
+            }
+
+        }
 
         shape.end();
 
@@ -192,9 +208,6 @@ public class ScreenPlaceYourShips extends ScreenBase {
 
     private void readKeys() {
         // read keys clicked on map
-
-        float x = (Gdx.input.getX() - OFFSET_X) / CELL_SIZE;
-        float y = (Gdx.graphics.getHeight() - Gdx.input.getY() - OFFSET_Y) / CELL_SIZE;
 
         Vector2 clickPosition = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 
@@ -219,16 +232,13 @@ public class ScreenPlaceYourShips extends ScreenBase {
                 dragShip.bounds.x = Gdx.input.getX() - clickCorrection.x;
                 dragShip.bounds.y = Gdx.graphics.getHeight() - Gdx.input.getY() - clickCorrection.y;
 
-                if (x >= 0 && x < 10 && y >= 0 && y < 10) {
-                    System.out.println(x + "x" + y);
-                    drawDragColors();
-                }
-
             } else {
                 dragShip = null;
             }
 
         }
+
+        drawDragColors();
         // read click on ships to map
     }
 
@@ -242,4 +252,16 @@ public class ScreenPlaceYourShips extends ScreenBase {
         font.dispose();
     }
 
+    class MyGestureListener extends DefaultGestureListener {
+
+        @Override
+        public boolean tap(float x, float y, int count, int button) {
+
+            if (dragShip != null && count == 2) {
+                dragShip.horizontal = !dragShip.horizontal;
+            }
+            return false;
+        }
+
+    }
 }
