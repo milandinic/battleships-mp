@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class ScreenPlaceYourShips extends ScreenBase {
@@ -216,11 +217,18 @@ public class ScreenPlaceYourShips extends ScreenBase {
 
         Vector2 clickPosition = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 
-        // System.out.println(clickPosition);
         if (dragShip == null) {
             for (Ship ship : ships) {
 
-                if (ship.bounds.contains(clickPosition)) {
+                Rectangle d;
+
+                if (ship.horizontal) {
+                    d = ship.bounds;
+                } else {
+                    d = new Rectangle(ship.bounds.x, ship.bounds.y, ship.bounds.height, ship.bounds.width);
+                }
+
+                if (d.contains(clickPosition)) {
                     System.out.println("clicked on ship " + ship.size);
                     if (Gdx.input.justTouched()) {
                         // start drag with ship
@@ -264,6 +272,7 @@ public class ScreenPlaceYourShips extends ScreenBase {
 
             if (dragShip != null && count == 2) {
                 dragShip.horizontal = !dragShip.horizontal;
+
             }
             return false;
         }
