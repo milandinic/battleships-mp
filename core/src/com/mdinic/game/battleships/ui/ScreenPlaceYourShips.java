@@ -186,21 +186,84 @@ public class ScreenPlaceYourShips extends ScreenBase {
 
         shape.setColor(0, 1, 0, 0.5f);
 
+        int shipMap[][] = new int[10][10];
+
         for (Ship ship : ships) {
 
             int x = (int) (ship.bounds.x / CELL_SIZE);
             int y = (int) (ship.bounds.y / CELL_SIZE);
 
             y--;
-            if (ship.horizontal) {
 
-                if (x >= 0 && x + ship.size <= 10 && y >= 0 && y < 10) {
-                    shape.rect(CELL_SIZE * x + OFFSET_X, y * CELL_SIZE + OFFSET_Y, CELL_SIZE * ship.size, CELL_SIZE);
+            if (dragShip != ship) {
+
+                if (ship.horizontal) {
+
+                    if (x >= 0 && x + ship.size <= 10 && y >= 0 && y < 10) {
+
+                        shape.rect(CELL_SIZE * x + OFFSET_X, y * CELL_SIZE + OFFSET_Y, CELL_SIZE * ship.size, CELL_SIZE);
+
+                        for (int i = Math.max(x - 1, 0); i < Math.min(x + ship.size + 1, 9); i++) {
+                            for (int j = Math.max(y - 1, 0); j < Math.min(y + 2, 9); j++) {
+                                shipMap[j][i] = 1;
+                            }
+                        }
+
+                    }
+                } else {
+
+                    if (x >= 0 && x < 10 && y >= 0 && y + ship.size <= 10) {
+                        shape.rect(CELL_SIZE * x + OFFSET_X, y * CELL_SIZE + OFFSET_Y, CELL_SIZE, CELL_SIZE * ship.size);
+                    }
+
+                    for (int i = Math.max(y - 1, 0); i < Math.min(y + ship.size + 1, 9); i++) {
+                        for (int j = Math.max(x - 1, 0); j < Math.min(x + 2, 9); j++) {
+                            shipMap[i][j] = 1;
+                        }
+                    }
                 }
-            } else {
+            }
+        }
 
-                if (x >= 0 && x < 10 && y >= 0 && y + ship.size <= 10) {
-                    shape.rect(CELL_SIZE * x + OFFSET_X, y * CELL_SIZE + OFFSET_Y, CELL_SIZE, CELL_SIZE * ship.size);
+        if (dragShip != null) {
+
+            boolean notFound = true;
+            int x = (int) (dragShip.bounds.x / CELL_SIZE);
+            int y = (int) (dragShip.bounds.y / CELL_SIZE);
+
+            y--;
+            if (dragShip.horizontal) {
+
+                if (x >= 0 && x + dragShip.size <= 10 && y >= 0 && y < 10) {
+                    for (int i = x; i < x + dragShip.size; i++) {
+                        if (shipMap[y][i] == 1) {
+                            notFound = false;
+                            break;
+
+                        }
+                    }
+
+                    if (notFound) {
+                        shape.rect(CELL_SIZE * x + OFFSET_X, y * CELL_SIZE + OFFSET_Y, CELL_SIZE * dragShip.size,
+                                CELL_SIZE);
+                    }
+                }
+
+            } else {
+                if (x >= 0 && x < 10 && y >= 0 && y + dragShip.size <= 10) {
+
+                    for (int i = y; i < y + dragShip.size; i++) {
+                        if (shipMap[i][x] == 1) {
+                            notFound = false;
+                            break;
+
+                        }
+                    }
+
+                    if (notFound) {
+                        shape.rect(CELL_SIZE * x + OFFSET_X, y * CELL_SIZE + OFFSET_Y, CELL_SIZE, CELL_SIZE
+                                * dragShip.size);
+                    }
                 }
             }
 
